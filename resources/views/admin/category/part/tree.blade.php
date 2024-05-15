@@ -1,33 +1,25 @@
-@php($level++)
-@foreach ($items->where('parent_id', $parent) as $item)
+<!-- resources/views/admin/category/part/tree.blade.php -->
+@foreach ($categories as $category)
     <tr>
+        <td style="padding-left: {{ $level * 20 }}px;">{{ $category->name }}</td>
+        <td>{{ $category->description }}</td>
         <td>
-            @if ($level)
-                {{ str_repeat('—', $level) }}
-            @endif
-            <a href="{{ route('admin.category.show', ['category' => $item->id]) }}"
-               style="font-weight:@if($level) normal @else bold @endif">
-                {{ $item->name }}
-            </a>
-        </td>
-        <td>{{ iconv_substr($item->content, 0, 150) }}</td>
-        <td>
-            <a href="{{ route('admin.category.edit', ['category' => $item->id]) }}">
-                <i class="far fa-edit"></i>
+            <a href="{{ route('admin.category.edit', ['category' => $category->id]) }}">
+                <i class="fas fa-edit"></i>
             </a>
         </td>
         <td>
-            <form action="{{ route('admin.category.destroy', ['category' => $item->id]) }}"
-                  method="post" onsubmit="return confirm('Удалить эту категорию?')">
+            <form action="{{ route('admin.category.destroy', ['category' => $category->id]) }}" method="post">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="m-0 p-0 border-0 bg-transparent">
-                    <i class="far fa-trash-alt text-danger"></i>
+                <input type="hidden" name="page" value="{{ request()->get('page', 1) }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash-alt"></i>
                 </button>
             </form>
         </td>
     </tr>
-    @if (count($items->where('parent_id', $parent)))
-        @include('admin.category.part.tree', ['level' => $level, 'parent' => $item->id])
+    @if ($category->children->isNotEmpty())
+        @include('admin.category.part.tree', ['categories' => $category->children, 'level' => $level + 1])
     @endif
 @endforeach

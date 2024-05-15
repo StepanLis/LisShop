@@ -22,8 +22,9 @@ class CategoryController extends Controller {
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function index() {
-        $items = Category::all();
-        return view('admin.category.index', compact('items'));
+        // Загрузка корневых категорий вместе с их подкатегориями
+        $categories = Category::where('parent_id', 0)->with('children')->get();
+        return view('admin.category.index', compact('categories'));
     }
 
     /**

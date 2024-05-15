@@ -8,6 +8,7 @@ use App\Http\Requests\ProductCatalogRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller {
 
@@ -122,11 +123,21 @@ class ProductController extends Controller {
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product) {
+    public function destroy(Product $product, Request $request) {
         $this->imageSaver->remove($product, 'product');
         $product->delete();
+
+        $page = $request->input('page', 1);
+        $total = Product::count();
+        $perPage = 5;
+
+        $lastPage = ceil($total / $perPage);
+        if ($page > $lastPage && $lastPage > 0) {
+            $page = $lastPage;
+        }
+
         return redirect()
-            ->route('admin.product.index')
+            ->route('admin.product.category', ['category' => $product->category_id, 'page' => $page])
             ->with('success', 'Товар каталога успешно удален');
     }
 }
