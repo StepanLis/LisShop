@@ -135,6 +135,8 @@ Route::group([
     // доп.маршрут для показа товаров категории
     Route::get('product/category/{category}', 'ProductController@category')
         ->name('product.category');
+    // маршрут для отображения каталога продуктов
+    Route::get('catalog', 'ProductController@index')->name('catalog.index');
     // просмотр и редактирование заказов
     Route::resource('order', 'OrderController', ['except' => [
         'create', 'store', 'destroy'
