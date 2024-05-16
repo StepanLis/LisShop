@@ -23,18 +23,19 @@ class ProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index(Request $request) {
         $roots = Category::where('parent_id', 0)->get();
         $products = Product::paginate(5);
         return view('admin.product.index', compact('products', 'roots'));
     }
+
 
     /**
      * Показывает товары категории
      *
      * @return \Illuminate\Http\Response
      */
-    public function category(Category $category) {
+    public function category(Category $category, Request $request) {
         $products = $category->products()->paginate(5);
         return view('admin.product.category', compact('category', 'products'));
     }
@@ -132,12 +133,23 @@ class ProductController extends Controller {
         $perPage = 5;
 
         $lastPage = ceil($total / $perPage);
-        if ($page > $lastPage && $lastPage > 0) {
+        if ($page > $lastPage) {
             $page = $lastPage;
         }
 
-        return redirect()
-            ->route('admin.product.category', ['category' => $product->category_id, 'page' => $page])
+        // Если текущая страница пуста после удаления, уменьшить номер страницы
+        if ($page > 1 && $total % $perPage == 0) {
+            $page--;
+        }
+
+        // Определить маршрут перенаправления
+        if ($request->filled('category')) {
+            $redirectRoute = route('admin.product.category', ['category' => $request->input('category'), 'page' => $page]);
+        } else {
+            $redirectRoute = route('admin.product.index', ['page' => $page]);
+        }
+
+        return redirect($redirectRoute)
             ->with('success', 'Товар каталога успешно удален');
     }
 }

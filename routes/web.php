@@ -132,3 +132,10 @@ Route::group([
     // удаление изображения в wysiwyg-редакторе
     Route::delete('page/remove/image', 'PageController@removeImage')->name('page.remove.image');
 });
+
+// Маршруты аутентификации
+Auth::routes(['verify' => true]);
+
+
+
+
