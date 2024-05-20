@@ -64,6 +64,7 @@ class ProductController extends Controller {
             'new' => $request->has('new'),
             'hit' => $request->has('hit'),
             'sale' => $request->has('sale'),
+            'description' => $request->filled('description') ? $request->input('description') : "Материнская плата: ---\nВидеокарта: ---\nПроцессор: ---\nОперативная память: ---\nБлок питания: ---\nЖёсткий диск: ---\nСистема охлождения: ---"
         ]);
         $data = $request->all();
         $data['image'] = $this->imageSaver->upload($request, null, 'product');

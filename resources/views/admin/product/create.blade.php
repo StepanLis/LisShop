@@ -3,6 +3,7 @@
 @section('content')
     <h1>Создание нового товара</h1>
     <form method="post" action="{{ route('admin.product.store') }}" enctype="multipart/form-data">
+        @csrf
         @include('admin.product.part.form')
     </form>
 @endsection

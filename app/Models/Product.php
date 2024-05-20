@@ -130,4 +130,15 @@ class Product extends Model {
         $query->orderBy('relevance', 'desc');
         return $query;
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            if (empty($product->description)) {
+                $product->description = "Материнская плата: ---\nВидеокарта: ---\nПроцессор: ---\nОперативная память: ---\nБлок питания: ---\nЖёсткий диск: ---\nСистема охлождения: ---";
+            }
+        });
+    }
 }

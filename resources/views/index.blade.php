@@ -1,13 +1,20 @@
 @extends('layout.site')
 
 @section('content')
-    <h1>Интернет-магазин</h1>
+    <h1>Интернет-магазин LisShop</h1>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto autem distinctio
-        dolorum ducimus earum eligendi est eum eveniet excepturi exercitationem explicabo facilis
-        fuga hic illum ipsam libero modi, nobis odio, officia officiis optio quae quibusdam
-        reiciendis repellendus sed sunt tenetur, voluptatum. Ab adipisci aperiam esse iure neque
-        quis repellendus temporibus.
+        Добро пожаловать в наш интернет магазин, где вы найдете широкий ассортимент высококачественных компьютеров и комплектующих для любых задач! Мы предлагаем все, что нужно как для профессиональной работы, так и для увлекательных игр. У нас вы найдете:
+    </p>
+    <ul>
+        <li>Настольные компьютеры для работы и развлечений.</li>
+        <li>Игровые компьютеры с мощными характеристиками для самых требовательных игр.</li>
+        <li>Ноутбуки для работы, учебы и мобильного гейминга.</li>
+        <li>Игровые ноутбуки с высокопроизводительными видеокартами и процессорами.</li>
+        <li>Моноблоки для стильного и удобного рабочего пространства.</li>
+        <li>Сбалансированные решения для пользователей, которым нужна универсальность и производительность.</li>
+    </ul>
+    <p>
+        Мы гарантируем качество наших товаров и предлагаем конкурентные цены. Начните свой путь к совершенству с нашим интернет-магазином!
     </p>
 
     @if($new->count())
