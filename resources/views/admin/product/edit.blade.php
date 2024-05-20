@@ -4,6 +4,7 @@
     <h1>Редактирование товара</h1>
     <form method="post" enctype="multipart/form-data"
           action="{{ route('admin.product.update', ['product' => $product->id]) }}">
+        @csrf
         @method('PUT')
         @include('admin.product.part.form')
     </form>

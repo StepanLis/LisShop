@@ -70,9 +70,12 @@
     </select>
 </div>
 <div class="form-group">
-    <textarea class="form-control" name="content" placeholder="Описание"
-              rows="4">{{ old('content') ?? $product->content ?? '' }}</textarea>
+    <textarea class="form-control" name="content" placeholder="Описание" rows="10">{!! old('content') ?? $product->content ?? "Видеокарта: ---\nПроцессор: ---\nОперативная память: ---\nМатеринская плата: ---\nСистема охлаждения: ---\nБлок питания: ---\nЖесткий диск/SSD: ---\nКорпус: ---" !!}</textarea>
 </div>
+
+
+
+
 <div class="form-group">
     <input type="file" class="form-control-file" name="image" accept="image/png, image/jpeg">
 </div>

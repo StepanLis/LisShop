@@ -12,6 +12,6 @@
             <th><i class="fas fa-edit"></i></th>
             <th><i class="fas fa-trash-alt"></i></th>
         </tr>
-        @include('admin.category.part.tree', ['level' => -1, 'parent' => 0])
+        @include('admin.category.part.tree', ['categories' => $categories, 'level' => 0])
     </table>
 @endsection

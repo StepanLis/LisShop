@@ -31,20 +31,15 @@ Route::group([
     'prefix' => 'catalog', // префикс маршрута, например catalog/index
 ], function () {
     // главная страница каталога
-    Route::get('index', 'CatalogController@index')
-        ->name('index');
+    Route::get('index', 'CatalogController@index')->name('index');
     // категория каталога товаров
-    Route::get('category/{category:slug}', 'CatalogController@category')
-        ->name('category');
+    Route::get('category/{category:slug}', 'CatalogController@category')->name('category');
     // бренд каталога товаров
-    Route::get('brand/{brand:slug}', 'CatalogController@brand')
-        ->name('brand');
+    Route::get('brand/{brand:slug}', 'CatalogController@brand')->name('brand');
     // страница товара каталога
-    Route::get('product/{product:slug}', 'CatalogController@product')
-        ->name('product');
+    Route::get('product/{product:slug}', 'CatalogController@product')->name('product');
     // страница результатов поиска
-    Route::get('search', 'CatalogController@search')
-        ->name('search');
+    Route::get('search', 'CatalogController@search')->name('search');
 });
 
 /*
@@ -55,39 +50,25 @@ Route::group([
     'prefix' => 'basket', // префикс маршрута, например basket/index
 ], function () {
     // список всех товаров в корзине
-    Route::get('index', 'BasketController@index')
-        ->name('index');
+    Route::get('index', 'BasketController@index')->name('index');
     // страница с формой оформления заказа
-    Route::get('checkout', 'BasketController@checkout')
-        ->name('checkout');
+    Route::get('checkout', 'BasketController@checkout')->name('checkout');
     // получение данных профиля для оформления
-    Route::post('profile', 'BasketController@profile')
-        ->name('profile');
+    Route::post('profile', 'BasketController@profile')->name('profile');
     // отправка данных формы для сохранения заказа в БД
-    Route::post('saveorder', 'BasketController@saveOrder')
-        ->name('saveorder');
+    Route::post('saveorder', 'BasketController@saveOrder')->name('saveorder');
     // страница после успешного сохранения заказа в БД
-    Route::get('success', 'BasketController@success')
-        ->name('success');
+    Route::get('success', 'BasketController@success')->name('success');
     // отправка формы добавления товара в корзину
-    Route::post('add/{id}', 'BasketController@add')
-        ->where('id', '[0-9]+')
-        ->name('add');
+    Route::post('add/{id}', 'BasketController@add')->where('id', '[0-9]+')->name('add');
     // отправка формы изменения кол-ва отдельного товара в корзине
-    Route::post('plus/{id}', 'BasketController@plus')
-        ->where('id', '[0-9]+')
-        ->name('plus');
+    Route::post('plus/{id}', 'BasketController@plus')->where('id', '[0-9]+')->name('plus');
     // отправка формы изменения кол-ва отдельного товара в корзине
-    Route::post('minus/{id}', 'BasketController@minus')
-        ->where('id', '[0-9]+')
-        ->name('minus');
+    Route::post('minus/{id}', 'BasketController@minus')->where('id', '[0-9]+')->name('minus');
     // отправка формы удаления отдельного товара из корзины
-    Route::post('remove/{id}', 'BasketController@remove')
-        ->where('id', '[0-9]+')
-        ->name('remove');
+    Route::post('remove/{id}', 'BasketController@remove')->where('id', '[0-9]+')->name('remove');
     // отправка формы для удаления всех товаров из корзины
-    Route::post('clear', 'BasketController@clear')
-        ->name('clear');
+    Route::post('clear', 'BasketController@clear')->name('clear');
 });
 
 /*
@@ -133,8 +114,9 @@ Route::group([
     // CRUD-операции над товарами каталога
     Route::resource('product', 'ProductController');
     // доп.маршрут для показа товаров категории
-    Route::get('product/category/{category}', 'ProductController@category')
-        ->name('product.category');
+    Route::get('product/category/{category}', 'ProductController@category')->name('product.category');
+    // маршрут для отображения каталога продуктов
+    Route::get('catalog', 'ProductController@index')->name('catalog.index');
     // просмотр и редактирование заказов
     Route::resource('order', 'OrderController', ['except' => [
         'create', 'store', 'destroy'
@@ -146,9 +128,14 @@ Route::group([
     // CRUD-операции над страницами сайта
     Route::resource('page', 'PageController');
     // загрузка изображения из wysiwyg-редактора
-    Route::post('page/upload/image', 'PageController@uploadImage')
-        ->name('page.upload.image');
+    Route::post('page/upload/image', 'PageController@uploadImage')->name('page.upload.image');
     // удаление изображения в wysiwyg-редакторе
-    Route::delete('page/remove/image', 'PageController@removeImage')
-        ->name('page.remove.image');
+    Route::delete('page/remove/image', 'PageController@removeImage')->name('page.remove.image');
 });
+
+// Маршруты аутентификации
+Auth::routes(['verify' => true]);
+
+
+
+

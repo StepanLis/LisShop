@@ -8,6 +8,7 @@ use App\Http\Requests\ProductCatalogRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller {
 
@@ -22,18 +23,19 @@ class ProductController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index(Request $request) {
         $roots = Category::where('parent_id', 0)->get();
         $products = Product::paginate(5);
         return view('admin.product.index', compact('products', 'roots'));
     }
+
 
     /**
      * Показывает товары категории
      *
      * @return \Illuminate\Http\Response
      */
-    public function category(Category $category) {
+    public function category(Category $category, Request $request) {
         $products = $category->products()->paginate(5);
         return view('admin.product.category', compact('category', 'products'));
     }
@@ -62,6 +64,7 @@ class ProductController extends Controller {
             'new' => $request->has('new'),
             'hit' => $request->has('hit'),
             'sale' => $request->has('sale'),
+            'description' => $request->filled('description') ? $request->input('description') : "Материнская плата: ---\nВидеокарта: ---\nПроцессор: ---\nОперативная память: ---\nБлок питания: ---\nЖёсткий диск: ---\nСистема охлождения: ---"
         ]);
         $data = $request->all();
         $data['image'] = $this->imageSaver->upload($request, null, 'product');
@@ -122,11 +125,32 @@ class ProductController extends Controller {
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product) {
+    public function destroy(Product $product, Request $request) {
         $this->imageSaver->remove($product, 'product');
         $product->delete();
-        return redirect()
-            ->route('admin.catalog.index')
+
+        $page = $request->input('page', 1);
+        $total = Product::count();
+        $perPage = 5;
+
+        $lastPage = ceil($total / $perPage);
+        if ($page > $lastPage) {
+            $page = $lastPage;
+        }
+
+        // Если текущая страница пуста после удаления, уменьшить номер страницы
+        if ($page > 1 && $total % $perPage == 0) {
+            $page--;
+        }
+
+        // Определить маршрут перенаправления
+        if ($request->filled('category')) {
+            $redirectRoute = route('admin.product.category', ['category' => $request->input('category'), 'page' => $page]);
+        } else {
+            $redirectRoute = route('admin.product.index', ['page' => $page]);
+        }
+
+        return redirect($redirectRoute)
             ->with('success', 'Товар каталога успешно удален');
     }
 }
